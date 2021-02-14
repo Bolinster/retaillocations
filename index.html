@@ -44,7 +44,7 @@
       }
 
       .mapboxgl-popup-content h3 {
-        background: rgb(61, 59, 59);
+        background: rgb(181, 3, 30);
         text-align: center;
         color: #fff;
         margin: 0;
@@ -70,7 +70,7 @@
       }
 
       .mapboxgl-popup-anchor-top>.mapboxgl-popup-tip {
-        border-bottom-color: rgb(61, 59, 59);
+        border-bottom-color: rgb(181, 3, 30);
       }
 
     </style>
@@ -86,18 +86,19 @@
           url.slice(10, 26) === "tiles.mapbox.com";
         return {
           url: isMapboxRequest ?
-            url.replace("?", "?pluginName=sheetMapper&") :
-            url
+            url.replace("?", "?pluginName=sheetMapper&") : url
         };
       };
       //YOUR TURN: add your Mapbox token
 
       mapboxgl.accessToken = 'pk.eyJ1IjoiYnRib2xpbiIsImEiOiJjam03MXd1aHIwNmduM3FxeGptbjh1eGt2In0._obaYGArvOIWVSOa4zQ4gA'; //Mapbox token 
       var map = new mapboxgl.Map({
-        container: 'map', // container id
-        style: 'mapbox://styles/btbolin/ckl3218m11zws17pmrc3ctbx0', // YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
-        center: [-122.411, 37.785], // starting position [lng, lat]
-        zoom: 10, // starting zoom
+        container: 'map',
+        zoom: 10,
+        center: [-122.919030, 41.578913],
+        pitch: 73.41,
+        bearing: 32.80,
+        style: 'mapbox://styles/btbolin/ckl4cibyn352y17mqmtvwef7r',
         transformRequest: transformRequest
       });
 
@@ -131,9 +132,11 @@
                   'data': data
                 },
                 'paint': {
-                  'circle-radius': 7,
-                  'circle-color': #b5031d,
-                  'fill-opacity': 0.6
+                  'circle-radius': 6,
+                  'circle-color': '#b5031d',
+                  'circle-stroke-color': 'white',
+                  'circle-stroke-width': 2,
+                  'circle-opacity': 0.8
                 }
               });
 
@@ -146,7 +149,7 @@
                 //set popup text
                 //You can adjust the values of the popup to match the headers of your CSV.
                 // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV.
-                var description = `<h3>` + e.features[0].properties.Name + `</h3>` + `<h4>` + `<b>` + `Address: ` + `</b>` + e.features[0].properties.Address + `</h4>` + `<h4>` + `<b>` + `Phone: ` + `</b>` + e.features[0].properties.Phone + `</h4>`;
+                var description = `<h3>` + e.features[0].properties.Name + `</h3>` + `<h4>` + `<b>` + `Address: ` + `</b>` + e.features[0].properties.Address + `</h4>` + `<h4>` + `<b>` + `Phone: ` + `</b>` + e.features[0].properties.Phone + `</h4>` + `<h4>` + `<b>` + `Website: ` + `</b>` + e.features[0].properties.Website + `</h4>` + `<h4>` + `<b>` + `Email: ` + `</b>` + e.features[0].properties.Email + `</h4>`;
 
                 // Ensure that if the map is zoomed out such that multiple
                 // copies of the feature are visible, the popup appears
@@ -185,6 +188,29 @@
       });
 
     </script>
+    <script>
+    map.on('load', function () {
+map.addSource('mapbox-dem', {
+'type': 'raster-dem',
+'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+'tileSize': 512,
+'maxzoom': 14
+});
+// add the DEM source as a terrain layer with exaggerated height
+map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+ 
+// add a sky layer that will show when the map is highly pitched
+map.addLayer({
+'id': 'sky',
+'type': 'sky',
+'paint': {
+'sky-type': 'atmosphere',
+'sky-atmosphere-sun': [0.0, 0.0],
+'sky-atmosphere-sun-intensity': 4
+}
+});
+});
+</script>
 
   </body>
 
