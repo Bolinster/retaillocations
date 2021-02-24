@@ -190,33 +190,44 @@
     </script>
     <script>
       map.on('load', function() {
-            map.addSource('mapbox-dem', {
-                'type': 'raster-dem',
-                'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
-                'tileSize': 512,
-                'maxzoom': 14
-                });
-              // add the DEM source as a terrain layer with exaggerated height
-              map.setTerrain({
-                'source': 'mapbox-dem',
-                'exaggeration': 1.5
-              });
+        map.addSource('mapbox-dem', {
+          'type': 'raster-dem',
+          'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+          'tileSize': 512,
+          'maxzoom': 14
+        });
+        // add the DEM source as a terrain layer with exaggerated height
+        map.setTerrain({
+          'source': 'mapbox-dem',
+          'exaggeration': 1.5
+        });
 
-              // add a sky layer that will show when the map is highly pitched
-              map.addLayer({
-                'id': 'sky',
-                'type': 'sky',
-                'paint': {
-                  'sky-type': 'atmosphere',
-                  'sky-atmosphere-sun': [0.0, 0.0],
-                  'sky-atmosphere-sun-intensity': 4,
-                  'hillshade-exaggeration': 1
-                }
-              });
-            });
+        // add a sky layer that will show when the map is highly pitched
+        map.addLayer({
+          'id': 'sky',
+          'type': 'sky',
+          'paint': {
+            'sky-type': 'atmosphere',
+            'sky-atmosphere-sun': [0.0, 0.0],
+            'sky-atmosphere-sun-intensity': 4,
+            'hillshade-exaggeration': 1
+          }
+        });
+      });
 
     </script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css" type="text/css">
+    
+    <script>
+      map.addControl(
+        new MapboxGeocoder({
+          accessToken: mapboxgl.accessToken,
+          mapboxgl: mapboxgl
+        })
+      );
 
+    </script>
   </body>
 
 </html>
